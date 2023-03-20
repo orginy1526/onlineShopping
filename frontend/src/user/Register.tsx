@@ -1,45 +1,63 @@
-import React from "react";
-import Navbar from "../mui/Navbar";
-import FlexBox from "../mui/FlexBox";
-import Card from "../mui/Card";
-import Select from "../mui/Select";
-import Input from "../mui/Input";
-import { Link } from "react-router-dom";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
-  const [cities, setCities] = React.useState([]);
-  React.useEffect(() => {
-    fetch(
-      "https://data.gov.il/api/3/action/datastore_search?resource_id=d4901968-dad3-4845-a9b0-a57d027f11ab"
-    )
-      .then((response) => response.json())
-      .then((data) =>
-        data.result.records.map((item: any) => setCities(item.שם_ישוב))
-      );
-  }, []);
+export default function FormPropsTextFields() {
+  // navigate
+  const navigate = useNavigate();
+
+  // sections
+  const sections = [
+    "First Name",
+    "Last Name",
+    "Email",
+    "password",
+    "Validate Password",
+    "id",
+  ];
   return (
     <div>
-      <Navbar />
-      <FlexBox
-        element={
-          <Card
-            heading="Registered?"
-            inputs={[
-              <Input text="First Name" />,
-              <Input text="Last Name" />,
-              <Input text="Email" />,
-              <Input text="Password" />,
-              <Input text="Validate Password" />,
-              <Select cities={cities} />,
-              // <Select />,
-            ]}
-            button={"Log In"}
-            link={<Link to={"/"}>registered</Link>}
-          />
-        }
-      />
+      {/* heading */}
+      <Typography
+        fontFamily={"cursive"}
+        color={"#2196f3"}
+        variant="h3"
+        gutterBottom
+        align="center"
+      >
+        Register
+      </Typography>
+
+      {/* form  */}
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        
+        {/* all text fields */}
+        {sections.map((item: string, index) => (
+          <TextField key={index} required id="outlined-required" label={item} />
+        ))}
+
+        {/* register - submit btn */}
+        <Button variant="contained" onClick={() => navigate("/products")}>
+          Register
+        </Button>
+
+        {/* cancel btn */}
+        <Button onClick={() => navigate("/")} sx={{ m: 2 }} variant="outlined">
+          Cancel
+        </Button>
+      </Box>
     </div>
   );
-};
-
-export default Register;
+}

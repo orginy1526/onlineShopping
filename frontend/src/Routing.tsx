@@ -1,16 +1,20 @@
-import React from "react";
 import { Routes, Route } from "react-router";
 import Login from "./Login";
-import About from "./user/About";
+// import Products from "./user/Products/Products";
 import Register from "./user/Register";
 
 const Routing = () => {
   return (
     <div>
       <Routes>
+        {/* login */}
         <Route path="/" element={<Login />} />
-        <Route path="/about" element={<About />} />
+
+        {/* register */}
         <Route path="/register" element={<Register />} />
+
+        {/* products */}
+        {/* <Routes path="/products" element={<Products />} /> */}
       </Routes>
     </div>
   );

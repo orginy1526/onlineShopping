@@ -1,1 +1,12 @@
-hello git2!
+front 
+1) navbar :)
+2) footer :) 
+3) login :)
+- get users :)
+- validate password + userName
+- check admin 
+- password / email incorrect  
+4) register :)
+6) products
+7) cart
+8) order
