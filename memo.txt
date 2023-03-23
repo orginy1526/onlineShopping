@@ -7,6 +7,7 @@ front
 - check admin 
 - password / email incorrect  
 4) register :)
-6) products
-7) cart
+6) products :)
+7) cart :)
 8) order
+9) settings

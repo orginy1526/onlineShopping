@@ -1,5 +1,6 @@
 import BottomNavigation from "@mui/material/BottomNavigation";
 import { Typography } from "@mui/material";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 
 export default function LabelBottomNavigation() {
   return (
@@ -18,9 +19,9 @@ export default function LabelBottomNavigation() {
     >
       <Typography>
         {/* contact info */}
-        <b>Contact Us</b> 0504024252 | orginy1526@gmail.com
+        <LocalPhoneIcon />
+        <b> Contact Us</b> 0504024252 | orginy1526@gmail.com
         <br />
-        
         {/* all rights reserved */}
         All rights reserve to Or Giny 2023 &copy;
       </Typography>

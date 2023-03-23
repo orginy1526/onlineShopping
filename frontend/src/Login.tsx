@@ -6,11 +6,28 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
 const Login = () => {
+  // users
+  const [users, setUsers] = useState({});
+
   // navigate
   const navigate = useNavigate();
 
   // input value
-  const { register, getValues } = useForm();
+  const { register, getValues, getFieldState } = useForm();
+
+  // error message
+  const errorMsg = (text: string, footer?: string) => {
+    return Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: text,
+      footer: footer,
+    });
+  };
+
+  // input/textfield error
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   // validation on Submit -> email & password
   const handleSubmit = () => {
@@ -18,43 +35,38 @@ const Login = () => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-    // text field value
+    // console log regex from useForm
+    console.log(getFieldState("email"));
+
+    // // text field value
     const inputs = getValues(["email", "password"]);
 
-    // email error
-    !emailRegex.test(inputs[0]) &&
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Seems like you got the wrong email!",
-      });
-
-    // password error
-    !passwordRegex.test(inputs[1]) &&
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: `Seems like you got the wrong password!`,
-      });
-
-    // email & password error
-    !emailRegex.test(inputs[0]) &&
-      !passwordRegex.test(inputs[1]) &&
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Make sure you fill all the fields correctly",
-        footer: '<a href="http://localhost:3000/register">register</a>',
-      });
+    // empty fields
+    if (inputs.includes("")) {
+      errorMsg(
+        "Make sure you fill all the fields",
+        '<a href="http://localhost:3000/register">register</a>'
+      );
+    }
 
     // success
-    emailRegex.test(inputs[0]) &&
-      passwordRegex.test(inputs[1]) &&
-      navigate("/products");
+    else if (
+      emailRegex.test(getValues("email")) &&
+      passwordRegex.test(getValues("password"))
+    ) {
+      console.log(users);
+      // navigate("/products");
+    }
+
+    // wrong email / password
+    else {
+      errorMsg(
+        "Make sure you wrote all the details correctly",
+        '<a href="http://localhost:3000/register">Don\'t have an account? Register</a>'
+      );
+    }
   };
 
-  // users
-  const [users, setUsers] = useState({});
   useEffect(() => {
     fetch("https://dummyjson.com/users?limit=10")
       .then((response) => response.json())
@@ -91,7 +103,23 @@ const Login = () => {
           id="outlined-basic"
           label="Email"
           variant="outlined"
-          {...register("email")}
+          {...(register("email", {
+            pattern: {
+              value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+              message: "invalid email address",
+            },
+          }),
+          {
+            onBlur: (e) => {
+              e.target.value === "" && setEmailError(true);
+            },
+            onChange: (e) => {
+              e.target.value === ""
+                ? setEmailError(true)
+                : setEmailError(false);
+            },
+          })}
+          error={emailError}
         />
 
         {/* password */}
@@ -100,7 +128,20 @@ const Login = () => {
           label="Password"
           variant="outlined"
           margin={"normal"}
-          {...register("password")}
+          {...(register("password", {
+            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+          }),
+          {
+            onBlur: (e) => {
+              e.target.value === "" && setPasswordError(true);
+            },
+            onChange: (e) => {
+              e.target.value === ""
+                ? setPasswordError(true)
+                : setPasswordError(false);
+            },
+          })}
+          error={passwordError}
         />
 
         {/* Login button */}
